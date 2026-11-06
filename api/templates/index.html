@@ -1,142 +1,368 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>QuizIt – DBMS Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>QuizIt Backend – DBMS Final Project</title>
 
-    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
 
     <style>
+      :root {
+        color-scheme: dark;
+        --bg: #12151c;
+        --surface: #181c25;
+        --border: #272c38;
+        --text: #e4e7ee;
+        --muted: #8f97a8;
+        --accent: #7aa2f7;
+        --sans:
+          "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
       body {
-        background-color: #0d1117;
-        color: #c9d1d9;
-        font-family: "Fira Code", monospace;
-        padding: 60px 20px;
+        height: 100%;
+      }
+
+      body {
         margin: 0;
-        text-align: center;
-      }
-
-      .main-title {
-        font-size: 2.8rem;
-        color: #00ffcc;
-        margin-bottom: 10px;
-        letter-spacing: 1px;
-        font-weight: 700;
-      }
-
-      .sub-title {
-        font-size: 1.3rem;
-        color: #ffaa33;
-        margin-bottom: 40px;
-        letter-spacing: 0.7px;
-      }
-
-      .cards {
         display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 40px;
+        flex-direction: column;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
       }
 
-      .card {
-        background-color: #161b22;
-        padding: 30px;
-        border-radius: 15px;
-        width: 300px;
-        box-shadow: 0 4px 20px rgba(0, 255, 204, 0.08);
-        transition: transform 0.3s ease;
+      a {
+        color: inherit;
       }
 
-      .card:hover {
-        transform: translateY(-5px);
+      a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
       }
 
-      .card img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #3aaf7c;
+      .wrap {
+        width: 100%;
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 0 40px;
       }
 
-      .name {
-        font-size: 1.4rem;
-        color: #00ffcc;
-        font-weight: bold;
-        margin-top: 12px;
+      /* Top bar */
+      .topbar {
+        border-bottom: 1px solid var(--border);
       }
 
-      .role {
-        font-size: 1rem;
-        margin-bottom: 6px;
-        color: #999;
+      .topbar .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 68px;
       }
 
-      .dept {
+      .wordmark {
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+      }
+
+      .topbar nav {
+        display: flex;
+        gap: 28px;
+      }
+
+      .topbar nav a {
+        color: var(--muted);
         font-size: 0.95rem;
-        color: #cccccc;
+        text-decoration: none;
       }
 
-      .project-info {
-        margin-top: 60px;
-        background-color: #161b22;
-        padding: 25px;
-        border-radius: 10px;
+      .topbar nav a:hover {
+        color: var(--text);
+      }
+
+      /* Main: two columns on desktop */
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 48px 0;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 5fr 6fr;
+        gap: 72px;
+        align-items: center;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: clamp(2.4rem, 4.2vw, 3.4rem);
+        line-height: 1.05;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+      }
+
+      .lead {
+        margin: 0 0 36px;
+        max-width: 46ch;
+        font-size: 1.15rem;
+        color: var(--muted);
+      }
+
+      .btn {
         display: inline-block;
-        text-align: left;
-        box-shadow: 0 0 10px rgba(0, 255, 204, 0.05);
-      }
-
-      .project-info p {
-        margin: 8px 0;
+        padding: 10px 18px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
         font-size: 0.95rem;
-        color: #cccccc;
+        font-weight: 500;
+        text-decoration: none;
+        transition: border-color 0.15s;
       }
 
-      .project-info span {
-        font-weight: bold;
-        color: #ffaa33;
+      .btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
       }
 
-      .credit {
-        margin-top: 30px;
-        font-size: 0.9rem;
-        color: #888;
+      .details {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        gap: 8px 20px;
+        margin: 40px 0 0;
+        padding-top: 28px;
+        border-top: 1px solid var(--border);
+        font-size: 0.95rem;
+      }
+
+      .details dt {
+        color: var(--muted);
+      }
+
+      .details dd {
+        margin: 0;
+      }
+
+      /* Team */
+      h2 {
+        margin: 0 0 20px;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .team {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 20px;
+      }
+
+      .member {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 28px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      .member img {
+        flex: none;
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: var(--border);
+      }
+
+      .member .name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        line-height: 1.3;
+      }
+
+      .member .name a {
+        text-decoration: none;
+      }
+
+      .member .name a:hover {
+        color: var(--accent);
+      }
+
+      .member .role {
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      .member .dept {
+        margin-top: 4px;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 20px 0;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+
+      /* Narrower screens: stack */
+      @media (max-width: 900px) {
+        .wrap {
+          padding: 0 24px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 48px;
+        }
+        main {
+          padding: 40px 0;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .member {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .details {
+          grid-template-columns: 1fr;
+          gap: 2px;
+        }
+        .details dd {
+          margin-bottom: 12px;
+        }
+        .topbar nav {
+          gap: 16px;
+        }
       }
     </style>
   </head>
 
   <body>
-    <div class="main-title">QuizIt</div>
-    <div class="sub-title">< DBMS Final Project /></div>
-
-    <div class="cards">
-      <div class="card">
-        <img src="https://github.com/ujjwal-dahal.png" alt="Ujjwal Dahal" />
-        <div class="name">Ujjwal Dahal</div>
-        <div class="role">Backend Developer</div>
-        <div class="dept">Dept. of Electronics Engineering</div>
+    <header class="topbar">
+      <div class="wrap">
+        <a class="wordmark" href="/">QuizIt Backend</a>
+        <nav>
+          <a href="/docs">API docs</a>
+          <a
+            href="https://github.com/ujjwal-dahal/quizit-backend"
+            target="_blank"
+            rel="noopener"
+            >GitHub</a
+          >
+          <a
+            href="https://www.linkedin.com/feed/update/urn:li:activity:7361013621755179008/"
+            target="_blank"
+            rel="noopener"
+            >LinkedIn post</a
+          >
+        </nav>
       </div>
+    </header>
 
-      <div class="card">
-        <img src="https://github.com/ManishJoc14.png" alt="Dharmananda Joshi" />
-        <div class="name">Dharmananda Joshi</div>
-        <div class="role">Frontend Developer</div>
-        <div class="dept">Dept. of Electronics Engineering</div>
+    <main>
+      <div class="wrap layout">
+        <div>
+          <h1>QuizIt Backend</h1>
+          <p class="lead">
+            The backend API for QuizIt, our final project for Database
+            Management Systems. Built with FastAPI.
+          </p>
+          <a
+            class="btn"
+            href="https://www.linkedin.com/feed/update/urn:li:activity:7361013621755179008/"
+            target="_blank"
+            rel="noopener"
+            >View LinkedIn post</a
+          >
+
+          <dl class="details">
+            <dt>College</dt>
+            <dd>IOE Thapathali Campus</dd>
+            <dt>Year</dt>
+            <dd>3rd Year</dd>
+            <dt>Subject teacher</dt>
+            <dd>Rajad Shakya</dd>
+          </dl>
+        </div>
+
+        <section>
+          <h2>Team</h2>
+          <ul class="team">
+            <li class="member">
+              <img
+                src="https://github.com/ujjwal-dahal.png"
+                alt="Ujjwal Dahal"
+                width="88"
+                height="88"
+              />
+              <div>
+                <div class="name">
+                  <a
+                    href="https://github.com/ujjwal-dahal"
+                    target="_blank"
+                    rel="noopener"
+                    >Ujjwal Dahal</a
+                  >
+                </div>
+                <div class="role">Backend Developer</div>
+                <div class="dept">
+                  Bachelor of Electronics, Communication and Information
+                  Engineering (BEI)
+                </div>
+              </div>
+            </li>
+            <li class="member">
+              <img
+                src="https://github.com/ManishJoc14.png"
+                alt="Dharmananda Joshi"
+                width="88"
+                height="88"
+              />
+              <div>
+                <div class="name">
+                  <a
+                    href="https://github.com/ManishJoc14"
+                    target="_blank"
+                    rel="noopener"
+                    >Dharmananda Joshi</a
+                  >
+                </div>
+                <div class="role">Frontend Developer</div>
+                <div class="dept">
+                  Bachelor of Electronics, Communication and Information
+                  Engineering (BEI)
+                </div>
+              </div>
+            </li>
+          </ul>
+        </section>
       </div>
-    </div>
+    </main>
 
-    <div class="project-info">
-      <p><span>College:</span> IOE Thapathali Campus</p>
-      <p><span>Year:</span> 3rd Year</p>
-      <p><span>Subject Teacher:</span> Rajad Shakya</p>
-    </div>
-
-    <div class="credit">Made by Dedicated Students from Nepal 🇳🇵</div>
+    <footer>
+      <div class="wrap">Built by students from Nepal.</div>
+    </footer>
   </body>
 </html>
